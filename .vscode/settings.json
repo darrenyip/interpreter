@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "global.h": "c",
+        "scanner.h": "c",
+        "stack.h": "c",
+        "limits.h": "c"
+    }
+}
