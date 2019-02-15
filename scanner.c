@@ -27,6 +27,7 @@ void runFile(char* path){
         push(&globalStack,ch);
         ch = fgetc(fptr);
     }
+    printf("close file");
     fclose(fptr);
 
 }
