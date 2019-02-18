@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "scanner.h"
+#include "printer.h"
 
 
 int main(int argc, char *argv[])
@@ -10,8 +11,9 @@ int main(int argc, char *argv[])
         printf("Usage: AMI [script]");
         exit(1);
     }else if(argc == 2){
+        printf("-----------------------------------------\n");
         printf("runFile launched\n");
-        runFile(argv[1]);
+        readFile(argv[1]);
     }else {
         printf("runPromt launched\n");
         runPrompt();
