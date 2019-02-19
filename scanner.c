@@ -24,6 +24,7 @@ void readFile(char* path){
     ch = fgetc(fptr);
     while(ch != EOF){
         appendCh(cArr,ch);   //append the new ch to the end of line
+        cArr++;
         ch = fgetc(fptr);
     }
     printf("Read from text file successful!!\n");
