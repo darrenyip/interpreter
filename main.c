@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "scanner.h"
 #include "printer.h"
+#include "rpn.h"
 
 
 int main(int argc, char *argv[])
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
         printf("-----------------------------------------\n");
         printf("runFile launched\n");
         readFile(argv[1]);
+        toPostfix();
     }else {
         printf("runPromt launched\n");
         runPrompt();
