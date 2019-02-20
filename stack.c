@@ -1,7 +1,5 @@
 // C program for linked list implementation of stack 
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <limits.h> 
+
 #include "stack.h"
 
 // A structure to represent a stack 

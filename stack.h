@@ -1,3 +1,7 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <limits.h> 
+
 #ifndef LINKEDSTACK_H_INCLUDED
 #define LINKEDSTACK_H_INCLUDED
 

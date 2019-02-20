@@ -1,19 +1,28 @@
+#include "printer.h"
+#include "global.h"
 
-#include <stdio.h>
 
-void printOutput(int arr[]){
-    // for(int i; i<20;i++){
-    //     printf("works2?\n");
-    //     printf("%c",arr[i]);
+void printOutput(){
+    struct token *ptr = NULL;
+    ptr = table;
+    // while(ptr!=NULL){
+    //     if(ptr->isNum){
+    //         printf("value: %d ", ptr->value);
+    //     }else
+    //     {
+    //         printf("newValue: %c ",ptr->value);
+    //     }
+        
+    //     ++ptr;
     // }
-    int i,*ptr;
-    ptr = arr;
-    printf("Printer output = ");
-    for(int i =0;i<20;i++){
-        printf("%c",*ptr);
-      /* move to the next location */
-        ptr++;
+    for(int i =0;i<10;i++){
+        if(ptr->isNum){
+            printf("%d ",ptr->value);
+        }else
+        {
+            printf("%c ",ptr->value);
+        }
+        ++ptr;
     }
     printf("\n");
-    printf("50 = %c\n",50);
 }

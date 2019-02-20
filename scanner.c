@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "global.h"
 
 
 char* appendCh(char *cArr,char c){

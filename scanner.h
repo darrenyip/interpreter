@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "global.h"
 
 
 void readFile(char* path);

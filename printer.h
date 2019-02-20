@@ -1,3 +1,4 @@
 
 
-void printOutput(int arr[]);
+#include <stdio.h>
+void printOutput();
