@@ -4,13 +4,14 @@
     and which can be put into tree later on
 */
 
-
+// typedef void (*callback)(token* data);
 
 /*
     create a new token
     initialize the value and next token
     return the newly created token
 */
+
 token* create(int value,_bool isNum, token* next){
     token* new_token = (token*)malloc(sizeof(token));
     if(new_token == NULL){
@@ -23,6 +24,9 @@ token* create(int value,_bool isNum, token* next){
 
     return new_token;
 }
+
+
+
 /*
     add a new token at the begining of the list
 */
@@ -46,7 +50,7 @@ token* append(token* head,int value,_bool isNum){
     // create a new token
     token* new_token = create(value,isNum,head);
     cursor->next = new_token;
-
+    printf("append success!\n");
     return head;
 }
 /*
@@ -54,11 +58,33 @@ token* append(token* head,int value,_bool isNum){
 */
 void traverse(token* head,callback f){
     token* cursor = head;
+    if(cursor == NULL){
+        printf("list is empty!!!!\n");
+    }
     while(cursor != NULL){
         f(cursor);
         cursor = cursor->next;
     }
 }
+/*
+    traverse the list
+*/
+void traverseList(token *head){
+    struct token *temp;
+    if(head == NULL){
+        printf("this shit is empty\n");
+        return;
+    }
+    temp = head;
+    while(temp!=NULL){
+        printf("this is the token{\n");
+        printf("value = %d\n",temp->value);
+        printf("isNum? = %d\n",temp->isNum);
+        printf("}\n");
+        temp = temp->next;
+    }
+}
+
 // display
 void display(token* n){
     if(n!=NULL){
@@ -92,4 +118,24 @@ int count(token *head){
         cursor = cursor->next;
     }
     return c;
+}
+
+token* remove_back(token* head){
+    if(head == NULL){
+        return NULL;
+    }
+    token *cursor = head;
+    token *back = NULL;
+    while(cursor->next != NULL){
+        back = cursor;
+        cursor = cursor->next;
+    }
+    if(back != NULL){
+        back->next = NULL;
+    }
+    if(cursor == head){
+        head = NULL;
+    }
+    free(cursor);
+    return head;
 }

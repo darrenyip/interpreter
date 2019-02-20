@@ -2,6 +2,7 @@
 #include "global.h"
 // #include "util.h"
 #include "stack.h"
+#include "tokenTable.h"
 
 
 #include "printer.h"   //only for test use        *delete later*
@@ -13,10 +14,9 @@ void toPostfix(){
     int c = 0;                 //counter for looping the line string
     _bool checker = FALSE; //check if the next character is the number
     int preCh;
-    struct token *ptrTable = NULL; //token struct ptr;
+    head = NULL;
+    tmp = NULL;
 
-    ptrTable = table;  //Table pointer
-    
     while(line[c]!= '\0'){
         int ch = line[c]; //for simple codeing
         if(c>0) preCh = line[c-1];
@@ -25,38 +25,38 @@ void toPostfix(){
         }
         
         if(checker){
-            printf("check is true and %c is added to ouput\n",ch);
-            --ptrTable; //ptr point to last token
+            printf("check is true and %c is added to token table\n",ch);
             int num = ch - '0';
-            ptrTable->isNum = TRUE;
-            ptrTable->value = (ptrTable->value)*10+num;
-            ++ptrTable;//ptrTable increment
+
             checker = FALSE;
         }else if(ch<48 || ch>57 ){
             if(ch == 41){
-                printf("This ( symbol is found and poped\n");
+                printf("This ) symbol is found and deleted\n");
                 int popOut = (int)pop(&globalStack);
                 char popP = pop(&globalStack);
                 printf("previous %c is poped\n",popP);
-                ptrTable->isNum = FALSE;
-                ptrTable->value = popOut;
-                ++ptrTable;
+                
+                head = append(head,popOut,FALSE);
+                
             }else{
-            push(&globalStack,ch);
+                push(&globalStack,ch);
             }
         }else{
-            printf("number %c is added to output array\n",ch);
+            printf("number %c is added to token table\n",ch);
             // output[counter] = ch;
             int num = ch - '0';
-            printf("+++++++++new method %d\n",num);
-            ptrTable->isNum = TRUE;
-            ptrTable->value = num;
-            ++ptrTable;
+            head = append(head,num,TRUE);
+
         }
         // printf("%c\n",line[c]);
         c++;
-        
+
     }
-    printOutput();
+    printf("error!0\n");
+    callback disp = display;
+    traverse(head,disp);
+
+    traverseList(head);
+    printf("error!1\n");
 
 }
