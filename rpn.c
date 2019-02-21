@@ -1,6 +1,5 @@
 #include "rpn.h"
 #include "global.h"
-// #include "util.h"
 #include "stack.h"
 #include "tokenTable.h"
 
@@ -11,7 +10,7 @@
 
 void toPostfix(){
     globalStack = NULL;         //create the stack
-    int c = 0;                 //counter for looping the line string
+    int c = 0, counter = 0;                 //counter for looping the line string
     _bool checker = FALSE; //check if the next character is the number
     int preCh;
     head = NULL;
@@ -27,7 +26,10 @@ void toPostfix(){
         if(checker){
             printf("check is true and %c is added to token table\n",ch);
             int num = ch - '0';
+            head = replaceNewToken(head,num,TRUE);
+            /*place to put in parse tree */
 
+            /*  -------------------------   */
             checker = FALSE;
         }else if(ch<48 || ch>57 ){
             if(ch == 41){
@@ -35,28 +37,46 @@ void toPostfix(){
                 int popOut = (int)pop(&globalStack);
                 char popP = pop(&globalStack);
                 printf("previous %c is poped\n",popP);
-                
                 head = append(head,popOut,FALSE);
-                
+                /*place to put in parse tree */
+
+                /*  -------------------------   */
             }else{
                 push(&globalStack,ch);
             }
         }else{
-            printf("number %c is added to token table\n",ch);
-            // output[counter] = ch;
-            int num = ch - '0';
-            head = append(head,num,TRUE);
+            if(counter == 0){
+                printf("number %c is added to token table\n",ch);
+                // output[counter] = ch;
+                int num = ch - '0';
+                head = prepend(head,num,TRUE);
+                /*place to put in parse tree */
+
+                /*  -------------------------   */
+                counter++;
+            }else{
+                printf("number %c is added to token table\n",ch);
+                // output[counter] = ch;
+                int num = ch - '0';
+                head = append(head,num,TRUE);
+                /*place to put in parse tree */
+
+                /*  -------------------------   */
+            }
+            
 
         }
         // printf("%c\n",line[c]);
         c++;
 
     }
-    printf("error!0\n");
-    callback disp = display;
-    traverse(head,disp);
+
+
 
     traverseList(head);
-    printf("error!1\n");
+    callback disp = display;
+    traverse(head,disp);
+    printf("\n");
+
 
 }

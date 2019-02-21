@@ -24,3 +24,5 @@ void dispose(token* head);
 int count(token *head);
 token* remove_back(token* head);
 void traverseList(token *head);
+token* replaceNewToken(token* head,int value,_bool isNum);
+token* reverse(token* head);

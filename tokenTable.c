@@ -39,18 +39,17 @@ token* prepend(token* head,int value, _bool isNum){
     add a new token at the end of the list
 */
 token* append(token* head,int value,_bool isNum){
-    if(head == NULL){
+    if(head == NULL)
         return NULL;
-    }
-    // go to the last node
+    /* go to the last node */
     token *cursor = head;
-    while(cursor->next != NULL){
+    while(cursor->next != NULL)
         cursor = cursor->next;
-    }
-    // create a new token
-    token* new_token = create(value,isNum,head);
+
+    /* create a new node */
+    token* new_token =  create(value,isNum,NULL);
     cursor->next = new_token;
-    printf("append success!\n");
+
     return head;
 }
 /*
@@ -88,10 +87,11 @@ void traverseList(token *head){
 // display
 void display(token* n){
     if(n!=NULL){
-        printf("this is the token{\n");
-        printf("value = %d\n",n->value);
-        printf("isNum? = %d\n",n->isNum);
-        printf("}\n");
+        if(n->isNum==1){
+            printf("%d ",n->value);
+        }else{
+            printf("%c ",n->value);
+        }
     }
 }
 /*
@@ -137,5 +137,36 @@ token* remove_back(token* head){
         head = NULL;
     }
     free(cursor);
+    return head;
+}
+
+token* replaceNewToken(token* head,int value,_bool isNum){
+    if(head ==  NULL){
+        return NULL;
+    }
+    token *cursor = head;
+    int valueInToken;
+    while(cursor != NULL){
+        valueInToken = cursor->value;
+        if(cursor->next == NULL){
+            cursor->value = valueInToken *10 + value;
+            printf("new value replaced! = %d\n",cursor->value);
+        }
+        cursor = cursor->next;
+    }
+    return head;
+}
+
+token* reverse(token* head){
+    token* prev = NULL;
+    token* current = head;
+    token* next;
+    while(current != NULL){
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
     return head;
 }
