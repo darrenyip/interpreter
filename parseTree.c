@@ -1,4 +1,8 @@
 #include "parseTree.h"
+/* 
+   parse tree now working yet
+*/
+
 
 void createTree(token *head){
    struct token *temp;
