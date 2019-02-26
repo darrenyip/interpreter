@@ -1,5 +1,7 @@
 #include "scanner.h"
 #include "global.h"
+#include "lexer.h"
+#include "tokenLinkedList.h"
 
 
 char* appendCh(char *cArr,char c){
@@ -9,7 +11,8 @@ char* appendCh(char *cArr,char c){
     return cArr;
 }
 
-void readFile(char* path){
+
+void readFileByLineAndExecute(char* path){
     FILE *fptr;     
     char ch;
     char* cArr; // pointer to global --->  line
@@ -20,21 +23,17 @@ void readFile(char* path){
         printf("Cannot open file \n");
         exit(0);
     }
-    /* --------------------------------- */
-
-    ch = fgetc(fptr);
-    while(ch != EOF){
-        appendCh(cArr,ch);   //append the new ch to the end of line
-        cArr++;
-        ch = fgetc(fptr);
+    while(fgets(buffer,255,(FILE*) fptr)){
+        //implement this
+        lexerAnalysis();
+        traverseList(head);
+        // printf("%s\n",buffer);
     }
-    printf("Read from text file successful!!\n");
-    printf("Output line = %s\n",line); // print the line from global ---> line    
-    printf("Close file\n");
+    traverseList(head);
+
     fclose(fptr);
     printf("-----------------------------------------\n");
 }
-
 
 
 /* -----use terminal to take input from user------ */

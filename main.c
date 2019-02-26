@@ -14,8 +14,7 @@ int main(int argc, char *argv[])
     }else if(argc == 2){
         printf("-----------------------------------------\n");
         printf("runFile launched\n");
-        readFile(argv[1]);
-        toPostfix();
+        readFileByLineAndExecute(argv[1]);
     }else {
         printf("runPromt launched\n");
         runPrompt();

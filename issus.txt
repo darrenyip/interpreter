@@ -1,0 +1,4 @@
+#1 Scanner has a method readFileByLineAndExecute() which read the input file by line
+    and exectute immediately. The problem is can I use a char array and in each block
+    store a line of input and execute from somewhere else.
+#2 

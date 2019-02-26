@@ -1,5 +1,7 @@
 #include "printer.h"
 #include "global.h"
+#include <string.h>
+
 
 
 void printOutput(){

@@ -5,6 +5,6 @@
 
 
 
-void readFile(char* path);
+void readFileByLineAndExecute(char* path);
 void runPrompt();
 char* appendCh(char *cArr,const char c);
