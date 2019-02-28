@@ -28,3 +28,4 @@ token* remove_back(token* head);
 void traverseList(token *head);
 token* replaceNewToken(token* head,int value,_bool isNum,char chr[]);
 token* reverse(token* head);
+int search(token* head,char data[]);

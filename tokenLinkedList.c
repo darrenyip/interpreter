@@ -171,3 +171,17 @@ token* reverse(token* head){
     head = prev;
     return head;
 }
+
+int search(token* head,char chr[])
+{
+   token *cursor = head;
+    while(cursor!=NULL)
+    {
+        if(strcmp(cursor->chr,chr)==0){
+            printf("%s exist. number is updated",chr );
+            return 1;
+        }
+        cursor = cursor->next;
+    }
+    return 0;
+}

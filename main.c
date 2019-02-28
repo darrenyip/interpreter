@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "global.h"
 #include "scanner.h"
 #include "printer.h"
 #include "rpn.h"
+#include "tokenLinkedList.h"
 
 
 int main(int argc, char *argv[])
 {   
+    globalStack = NULL;
+    head = NULL;
     /* scanner module first */
     if(argc > 2 ){
         printf("Usage: AMI [script]");

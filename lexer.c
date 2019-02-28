@@ -1,51 +1,48 @@
 #include "lexer.h"
 #include "global.h"
 #include "tokenLinkedList.h"
+#include "service.h"
 
 
 /*  use the buffer which is a single line from the input
     and seperate the keywords into tokens
 */
 void lexerAnalysis(){
-    int i = 0; 
-    head = NULL;
+    int i = 0,j = 0; 
+    head = NULL; 
     tmp = NULL;
-    printf("----print from lexer-----\n");
+    printf("--------print from lexer--------\n");
     int index = 0;
+    char instructions[10];
     char data[255];
+
     while(buffer[index] != '\0'){
-        
-        if(buffer[index]!=' '){
-            lexerAppendCh(data,buffer[index]);
-        }else if(buffer[index] == ' '){                // in here we omit the space
-            /* add this data to token
-                data->data
-                isNUM-> FALSE
-                int->null
-            */
-            if(i==0){
-                printf("%s\n",data);
-                head = prepend(head,0,FALSE,data);
-                data[0] = '\0';
-                // memset(data,0,255);
+        if(buffer[index]!=' ' && i == 0){
+            lexerAppendCh(instructions,buffer[index]);
+        }else if((buffer[index] ==' ' && (i == 0))){
+            // printf("do nothing cuz a space found\n");
+            if(buffer[index+1] != ' '){
                 i++;
-            }else{
-                printf("%s\n",data);
-                head = append(head,0,FALSE,data);
-                data[0] = '\0';
-                // memset(data,0,255);
             }
-            //clear the char in data array
+            
         }else
         {
-            printf("extra else here");
+            lexerAppendCh(data,buffer[index]);
         }
-        
         index++;
     }
+    int lenIns,lenData;
+    lenIns = strlen(instructions);
+    lenData = strlen(data);
+    if(instructions[lenIns-1] == '\n') instructions[lenIns-1] = 0;
+    if(data[lenData-1] == '\n') data[lenData - 1] = 0;
+    printf("instructions=%s   ",instructions);
+    printf("data=%s\n",data);
+    parse(instructions,data);
+    memset(instructions,0,10);
+    memset(data,0,255);
     // add this data below to token as well 
-    printf("%s\n",data);
-    // printf("%s\n",buffer);
+    printf("\n\n");
 }
 
 void lexerAppendCh(char* s, char c)

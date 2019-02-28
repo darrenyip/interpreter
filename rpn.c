@@ -42,7 +42,7 @@ void toPostfix(){
 
                 /*  -------------------------   */
             }else{
-                push(&globalStack,ch);
+                // push(&globalStack,ch);
             }
         }else{
             if(counter == 0){

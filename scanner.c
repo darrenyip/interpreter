@@ -26,10 +26,8 @@ void readFileByLineAndExecute(char* path){
     while(fgets(buffer,255,(FILE*) fptr)){
         //implement this
         lexerAnalysis();
-        traverseList(head);
         // printf("%s\n",buffer);
     }
-    traverseList(head);
 
     fclose(fptr);
     printf("-----------------------------------------\n");
