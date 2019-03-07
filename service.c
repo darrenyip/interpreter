@@ -1,7 +1,7 @@
 #include "service.h"
 #include "global.h"
 #include "stack.h"
-#include "stack.h"
+// #include "stack.h"
 
 
 void pushService(char data[]){

@@ -1,6 +1,6 @@
 #include "lexer.h"
 #include "global.h"
-#include "tokenLinkedList.h"
+// #include "tokenLinkedList.h"
 #include "service.h"
 
 
@@ -9,8 +9,6 @@
 */
 void lexerAnalysis(){
     int i = 0,j = 0; 
-    head = NULL; 
-    tmp = NULL;
     printf("--------print from lexer--------\n");
     int index = 0;
     char instructions[10];
