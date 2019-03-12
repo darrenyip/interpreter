@@ -1,8 +1,11 @@
 #include "tokenLinkedList.h"
+#include "stack.h"
+#include "global.h"
 /*
     a token table which can store all the input token
     and which can be put into tree later on
 */
+
 
 
 /*
@@ -23,6 +26,17 @@ token* create(int value,_bool isNum, token* next,char chr[]){
 
     return new_token;
 }
+token* createNew(token* next,char chr[]){
+    token* new_token = (token*)malloc(sizeof(token));
+    if(new_token == NULL){
+        printf("Error creating a new node.\n");
+        exit(0);
+    }
+    strcpy(new_token->chr,chr);
+    new_token->next = next;
+
+    return new_token;
+}
 
 
 
@@ -34,6 +48,24 @@ token* prepend(token* head,int value, _bool isNum,char chr[]){
     head = new_token;
     return head;
 }
+
+void prependAddress(token* head,char chr[]){
+    token* new_token = createNew(head,chr);
+    head = new_token;
+    printf("address of new token:%p -- prependAddress()\n",&new_token);
+    pushLvalue(&globalStack,&new_token); //push address into stack
+}
+
+void addAddressToLinkedList(token* head,char chr[]){
+    if(head == NULL){
+        prependAddress(head,chr);
+    }else 
+    {
+        appendAddress(head,chr);
+    }
+}
+
+
 /*
     add a new token at the end of the list
 */
@@ -50,6 +82,23 @@ token* append(token* head,int value,_bool isNum,char chr[]){
     cursor->next = new_token;
 
     return head;
+}
+
+void appendAddress(token* head,char chr[]){
+    if(head == NULL)
+        printf("NULL linked List -- appendAddress()");
+    /* go to the last node */
+    token *cursor = head;
+    
+    while(cursor->next != NULL)
+        cursor = cursor->next;
+
+    /* create a new node if it is a new variable*/
+    token* new_token =  createNew(NULL,chr);
+    cursor->next = new_token;
+    printf("address of new token:%p -- appendAddress()\n",&new_token);
+    pushLvalue(&globalStack,&new_token); //push address into stack
+    
 }
 
 /*

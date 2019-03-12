@@ -6,6 +6,7 @@
 struct StackNode 
 {   
     int num;
+    char *address;
     char data[255]; 
     struct StackNode* next; 
 }; 
@@ -20,6 +21,24 @@ struct StackNode* newNode(char data[])
     strcpy(stackNode->data,data);
     stackNode->next = NULL; 
     return stackNode; 
+} 
+
+struct StackNode* newAddressNode(char *address) 
+{   
+    struct StackNode* stackNode = (struct StackNode*) malloc(sizeof(struct StackNode)); 
+    stackNode->address = address;
+    stackNode->next = NULL; 
+    strcpy(stackNode->data,"address");
+    printf("address:%p -- newAddressNode()\n",stackNode->address); //pass success
+    return stackNode; 
+}
+
+void pushLvalue(struct StackNode** root, char *location) 
+{   
+    printf("address:%p -- pushLvalue()\n",location);
+    struct StackNode* stackNode = newAddressNode(location);
+    stackNode->next = *root; 
+    *root = stackNode;
 } 
 
 int isEmpty(struct StackNode *root) 
@@ -42,22 +61,23 @@ void pushRvalue(struct StackNode** root, char data[])
     printf("%s pushed to stack\n", data); 
 } 
 
-char* pop(struct StackNode** root) 
+void popStack(struct StackNode** root) 
 { 
     if (isEmpty(*root)) {
         printf("Empty stack! the number returned is 0\n");
-        return '0'; 
     }
-
     struct StackNode* temp = *root; 
-    *root = (*root)->next; 
-    // char popped = temp->data; 
-    char poped[255];
-    strcpy(poped,temp->data);
-    // printf("stack tempData %c -- %s\n",temp->data,temp->data);;
+    *root = (*root)->next;
+    int number;
+    char *address;
+    if(strcmp(temp->data,"address") != 0){
+        number = atoi(temp->data);  
+        printf("pop:%d\n",number);
+    }else{
+        address = temp->address;
+        printf("address:%p",address);
+    }
     free(temp); 
-
-    return poped; 
 } 
 
 int popNum(struct StackNode** root){
@@ -73,12 +93,14 @@ int popNum(struct StackNode** root){
     return number; 
 } 
 
-char peek(struct StackNode* root) 
+void peek(struct StackNode* root) 
 { 
     if (isEmpty(root)) {
-        return '0'; 
+        printf("stack is empty\n");
     }
     int number = atoi(root->data);
     printf("print:%d\n",number);
-    return root->data; 
 } 
+
+
+

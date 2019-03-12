@@ -6,7 +6,7 @@ void pushService(char data[]);
 
 void rvalue(char data[]);
 
-void lvalue();
+void lvalue(char data[]);
 
 void popService();
 

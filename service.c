@@ -1,7 +1,8 @@
 #include "service.h"
 #include "global.h"
 #include "stack.h"
-// #include "stack.h"
+#include "tokenLinkedList.h"
+
 
 
 void pushService(char data[]){
@@ -15,10 +16,13 @@ void rvalue(char data[]){
     pushRvalue(&globalStack,data);
 }
 
-void lvalue(){}
+void lvalue(char data[]){
+    /* create a new token added to linked list then push */
+    addAddressToLinkedList(head,data);
+}
 
 void popService(){
-    popNum(&globalStack);
+    popStack(&globalStack);
 };
 
 void noooice(){}
@@ -184,7 +188,7 @@ void equalSign(){}
 void parse(char ins[],char data[]){
     if(strcmp(ins,"push") == 0){pushService(data);}
     if(strcmp(ins,"rvalue") == 0){rvalue(data);}
-    if(strcmp(ins,"lvalue") == 0){lvalue();}
+    if(strcmp(ins,"lvalue") == 0){lvalue(data);}
     if(strcmp(ins,"print") == 0){print();}
     if(strcmp(ins,"pop") == 0){popService();}
     if(strcmp(ins,":=") == 0){noooice();}

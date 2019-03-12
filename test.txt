@@ -1,2 +1,59 @@
-show
-show  This code illustrates basic arithmetic
+show 
+show fact.abm ( Computes 5 factorial
+show                using a loop )
+show  
+lvalue n
+push 5
+:=
+
+lvalue f
+push 1
+:=
+
+lvalue t
+rvalue f
+:=
+
+lvalue i
+rvalue n
+:=
+
+goto fact
+label out
+
+lvalue f
+rvalue t
+:=
+
+show 
+show 5 factorial is:
+rvalue f
+print
+pop
+show 
+halt
+
+label fact
+  show Loop to compute factorial  
+  label loop
+  rvalue i
+  push 1
+  >
+  gofalse out
+  
+  lvalue t
+  rvalue t
+  rvalue i
+  *
+  :=
+  
+  lvalue i
+  rvalue i
+  push 1
+  -
+  :=
+
+  goto loop
+ 
+
+

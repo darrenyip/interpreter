@@ -3,7 +3,6 @@
 #include "global.h"
 #include "scanner.h"
 #include "printer.h"
-#include "rpn.h"
 #include "tokenLinkedList.h"
 
 

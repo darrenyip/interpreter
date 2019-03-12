@@ -13,6 +13,7 @@ char* appendCh(char *cArr,char c){
 
 
 void readFileByLineAndExecute(char* path){
+    head = NULL;
     FILE *fptr;     
     char ch;
     char* cArr; // pointer to global --->  line
