@@ -25,7 +25,10 @@ void popService(){
     popStack(&globalStack);
 };
 
-void noooice(){}
+void noooice(){
+    int num = popNum(&globalStack);
+    
+}
 
 void copy(){}
 

@@ -3,9 +3,7 @@ show fact.abm ( Computes 5 factorial
 show                using a loop )
 show  
 lvalue n
-pop
 push 5
-pop
 :=
 lvalue f
 push 1

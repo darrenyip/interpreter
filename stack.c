@@ -6,8 +6,9 @@
 struct StackNode 
 {   
     int num;
-    char *address;
-    char data[255]; 
+    char *address; //store address
+    char *variable; // is this stack node a variable?
+    char data[255];
     struct StackNode* next; 
 }; 
 
@@ -17,7 +18,6 @@ struct StackNode* newNode(char data[])
     len = strlen(data);
     if(data[len-1] == '\n') data[len-1] = 0;
     struct StackNode* stackNode = (struct StackNode*) malloc(sizeof(struct StackNode)); 
-    // stackNode->data = data;
     strcpy(stackNode->data,data);
     stackNode->next = NULL; 
     return stackNode; 
@@ -32,6 +32,17 @@ struct StackNode* newAddressNode(char *address)
     printf("address:%p -- newAddressNode()\n",stackNode->address); //pass success
     return stackNode; 
 }
+
+struct StackNode* newVariableNode(char *address) 
+{   
+    struct StackNode* stackNode = (struct StackNode*) malloc(sizeof(struct StackNode)); 
+    stackNode->next = NULL; 
+    stackNode->variable = "variable";
+    strcpy(stackNode->data,"address");
+    printf("address:%p -- newAddressNode()\n",stackNode->address); //pass success
+    return stackNode; 
+}
+
 
 void pushLvalue(struct StackNode** root, char *location) 
 {   
@@ -83,12 +94,18 @@ void popStack(struct StackNode** root)
 int popNum(struct StackNode** root){
     if (isEmpty(*root)) {
         printf("Empty stack! the number returned is 0\n");
-        return '0'; 
     }
     struct StackNode* temp = *root; 
-    *root = (*root)->next; 
-    int number = atoi(temp->data);    
-    printf("pop:%d\n",number);
+    *root = (*root)->next;
+    int number;
+    char *address;
+    if(strcmp(temp->data,"address") != 0){
+        number = atoi(temp->data);  
+        printf("pop:%d\n",number);
+    }else{
+        address = temp->address;
+        printf("address:%p",address);
+    }
     free(temp); 
     return number; 
 } 
