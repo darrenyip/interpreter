@@ -1,12 +1,6 @@
-show 
-show fact.abm ( Computes 5 factorial
-show                using a loop )
-show  
+show  test
 lvalue n
 push 5
 :=
-lvalue f
-push 1
-:=
-pop
+rvalue n
 pop

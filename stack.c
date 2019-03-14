@@ -1,55 +1,62 @@
 // C program for linked list implementation of stack 
 #include "stack.h"
+#include "tokenLinkedList.h"
+#include "util.h"
 
 
 // A structure to represent a stack 
 struct StackNode 
 {   
     int num;
-    char *address; //store address
-    char *variable; // is this stack node a variable?
-    char data[255];
+    _bool isVar;
+    _bool isNum;
+    char variableName[255];
     struct StackNode* next; 
 }; 
 
-struct StackNode* newNode(char data[]) 
+struct StackNode* newNode(char variableName[]) 
 { 
     int len;
-    len = strlen(data);
-    if(data[len-1] == '\n') data[len-1] = 0;
+    len = strlen(variableName);
+    if(variableName[len-1] == '\n') variableName[len-1] = 0;
     struct StackNode* stackNode = (struct StackNode*) malloc(sizeof(struct StackNode)); 
-    strcpy(stackNode->data,data);
+    strcpy(stackNode->variableName,variableName);
     stackNode->next = NULL; 
     return stackNode; 
 } 
 
-struct StackNode* newAddressNode(char *address) 
-{   
+
+struct StackNode* newVariableNode(char variableName[]) 
+{ 
+    int len;
+    len = strlen(variableName);
+    if(variableName[len-1] == '\n') variableName[len-1] = 0;
     struct StackNode* stackNode = (struct StackNode*) malloc(sizeof(struct StackNode)); 
-    stackNode->address = address;
-    stackNode->next = NULL; 
-    strcpy(stackNode->data,"address");
-    printf("address:%p -- newAddressNode()\n",stackNode->address); //pass success
+    strcpy(stackNode->variableName,variableName);
+    stackNode->next = NULL;
     return stackNode; 
-}
+} 
 
-struct StackNode* newVariableNode(char *address) 
+    
+void pushLvalue(struct StackNode** root,char variableName[]) 
 {   
-    struct StackNode* stackNode = (struct StackNode*) malloc(sizeof(struct StackNode)); 
-    stackNode->next = NULL; 
-    stackNode->variable = "variable";
-    strcpy(stackNode->data,"address");
-    printf("address:%p -- newAddressNode()\n",stackNode->address); //pass success
-    return stackNode; 
-}
-
-
-void pushLvalue(struct StackNode** root, char *location) 
-{   
-    printf("address:%p -- pushLvalue()\n",location);
-    struct StackNode* stackNode = newAddressNode(location);
-    stackNode->next = *root; 
+    struct StackNode* stackNode = newVariableNode(variableName);
+    stackNode->isVar = TRUE;
+    stackNode->isNum = FALSE;
+    stackNode->next = *root;
     *root = stackNode;
+    printf("variableName of %s is pushed -- pushLvalue()\n",stackNode->variableName);
+} 
+
+void pushRvalue(struct StackNode** root, char variableName[],int num) 
+{   
+    struct StackNode* stackNode = newVariableNode(variableName);
+    stackNode->isVar = TRUE;
+    stackNode->isNum = FALSE;
+    stackNode->num = num;
+    stackNode->next = *root; 
+    *root = stackNode; 
+    printf("content:%d of %s pushed to stack\n",stackNode->num, variableName); 
 } 
 
 int isEmpty(struct StackNode *root) 
@@ -57,22 +64,20 @@ int isEmpty(struct StackNode *root)
     return !root; 
 } 
 
-void pushNum(struct StackNode** root, char data[]) 
+void pushNum(struct StackNode** root, char variableName[]) 
 {   
-    struct StackNode* stackNode = newNode(data); 
+    struct StackNode* stackNode = newNode(variableName);
+    int number = atoi(stackNode->variableName); 
+    stackNode->isVar = FALSE;
+    stackNode->isNum = TRUE;
+    stackNode->num = number;
     stackNode->next = *root; 
     *root = stackNode; 
-    printf("%s pushed to stack\n", data); 
-} 
-void pushRvalue(struct StackNode** root, char data[]) 
-{   
-    struct StackNode* stackNode = newNode("0"); 
-    stackNode->next = *root; 
-    *root = stackNode; 
-    printf("%s pushed to stack\n", data); 
+    printf("%s pushed to stack\n", variableName); 
 } 
 
-void popStack(struct StackNode** root) 
+
+int popStack(struct StackNode** root) 
 { 
     if (isEmpty(*root)) {
         printf("Empty stack! the number returned is 0\n");
@@ -80,44 +85,73 @@ void popStack(struct StackNode** root)
     struct StackNode* temp = *root; 
     *root = (*root)->next;
     int number;
-    char *address;
-    if(strcmp(temp->data,"address") != 0){
-        number = atoi(temp->data);  
+    int tempNum;
+    
+    if(temp->isVar){
+        tempNum = findVar(head,temp->variableName);
+        printf("tempNum:%d -- popStack()\n",tempNum);
+        number = tempNum;
+        printf("content: %d of variable: %s is popped -- popStack()\n",temp->num,temp->variableName);
+    }else if(temp->isNum){
+        number = atoi(temp->variableName);  
         printf("pop:%d\n",number);
-    }else{
-        address = temp->address;
-        printf("address:%p",address);
     }
     free(temp); 
+    return number; 
 } 
 
-int popNum(struct StackNode** root){
+char* popVarName(struct StackNode** root) 
+{ 
+    if (isEmpty(*root)) {
+        printf("Empty stack! the number returned is 0\n");
+    }
+    struct StackNode* temp = *root; 
+    *root = (*root)->next;
+    char* varName;
+    
+    varName = temp->variableName;
+    free(temp); 
+    return varName; 
+} 
+
+int popNum(struct StackNode** root){ //associate with operators
     if (isEmpty(*root)) {
         printf("Empty stack! the number returned is 0\n");
     }
     struct StackNode* temp = *root; 
     *root = (*root)->next;
     int number;
-    char *address;
-    if(strcmp(temp->data,"address") != 0){
-        number = atoi(temp->data);  
+    if(strcmp(temp->variableName,"address" ) != 0){
+        number = atoi(temp->variableName);  
         printf("pop:%d\n",number);
-    }else{
-        address = temp->address;
-        printf("address:%p",address);
     }
     free(temp); 
     return number; 
-} 
+}
+
+// char* popAddress(struct StackNode** root){   //associate with := instrcution
+//     if (isEmpty(*root)) {
+//         printf("Empty stack! the number returned is 0\n");
+//     }
+//     struct StackNode* temp = *root; 
+//     *root = (*root)->next;
+//     int number;
+//     char *address;
+//     if(strcmp(temp->variableName,"address") != 0){
+//         number = atoi(temp->variableName);  
+//         printf("pop:%d\n",number);
+//     }
+//     free(temp); 
+//     return address; 
+// }
 
 void peek(struct StackNode* root) 
 { 
     if (isEmpty(root)) {
         printf("stack is empty\n");
     }
-    int number = atoi(root->data);
+    int number = atoi(root->variableName);
     printf("print:%d\n",number);
 } 
-
 
 

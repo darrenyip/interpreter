@@ -13,7 +13,7 @@
     initialize the value and next token
     return the newly created token
 */
-token* create(int value,_bool isNum, token* next,char chr[]){
+token* create(int value, token* next,char chr[]){
     token* new_token = (token*)malloc(sizeof(token));
     if(new_token == NULL){
         printf("Error creating a new node.\n");
@@ -21,7 +21,6 @@ token* create(int value,_bool isNum, token* next,char chr[]){
     }
     strcpy(new_token->chr,chr);
     new_token->value = value;
-    new_token->isNum = isNum;
     new_token->next = next;
 
     return new_token;
@@ -33,6 +32,7 @@ token* createNew(token* next,char chr[]){
         exit(0);
     }
     strcpy(new_token->chr,chr);
+
     new_token->next = next;
 
     return new_token;
@@ -43,33 +43,45 @@ token* createNew(token* next,char chr[]){
 /*
     add a new token at the begining of the list
 */
-token* prepend(token* head,int value, _bool isNum,char chr[]){
-    token* new_token = create(value,isNum,head,chr);
+// token* prepend(token* head,int value, _bool isNum,char chr[]){
+//     token* new_token = create(value,isNum,head,chr);
+//     head = new_token;
+//     return head;
+// }
+token* prepend(token* head,char chr[]){
+    token* new_token = createNew(head,chr);
     head = new_token;
     return head;
 }
 
-void prependAddress(token* head,char chr[]){
+
+token* prependAddress(token* head,char chr[]){
     token* new_token = createNew(head,chr);
     head = new_token;
-    printf("address of new token:%p -- prependAddress()\n",&new_token);
-    pushLvalue(&globalStack,&new_token); //push address into stack
+    pushLvalue(&globalStack,chr); 
+    return head;
 }
 
-void addAddressToLinkedList(token* head,char chr[]){
-    if(head == NULL){
-        prependAddress(head,chr);
-    }else 
-    {
-        appendAddress(head,chr);
-    }
-}
 
 
 /*
     add a new token at the end of the list
 */
-token* append(token* head,int value,_bool isNum,char chr[]){
+// token* append(token* head,int value,_bool isNum,char chr[]){
+//     if(head == NULL)
+//         return NULL;
+//     /* go to the last node */
+//     token *cursor = head;
+//     while(cursor->next != NULL)
+//         cursor = cursor->next;
+
+//     /* create a new node */
+//     token* new_token =  create(value,isNum,NULL,chr);
+//     cursor->next = new_token;
+
+//     return head;
+// }
+token* append(token* head,char chr[]){
     if(head == NULL)
         return NULL;
     /* go to the last node */
@@ -78,27 +90,28 @@ token* append(token* head,int value,_bool isNum,char chr[]){
         cursor = cursor->next;
 
     /* create a new node */
-    token* new_token =  create(value,isNum,NULL,chr);
+    token* new_token =  createNew(NULL,chr);
     cursor->next = new_token;
 
     return head;
 }
 
-void appendAddress(token* head,char chr[]){
+token* appendAddress(token* head,char chr[]){
+    
+    
     if(head == NULL)
-        printf("NULL linked List -- appendAddress()");
+        return NULL;
     /* go to the last node */
     token *cursor = head;
-    
     while(cursor->next != NULL)
         cursor = cursor->next;
 
-    /* create a new node if it is a new variable*/
+    /* create a new node */
     token* new_token =  createNew(NULL,chr);
     cursor->next = new_token;
-    printf("address of new token:%p -- appendAddress()\n",&new_token);
-    pushLvalue(&globalStack,&new_token); //push address into stack
     
+    pushLvalue(&globalStack,chr); //push address into stack
+    return head;
 }
 
 /*
@@ -127,8 +140,7 @@ void traverseList(token *head){
     while(temp!=NULL){
         printf("this is the token{\n");
         printf("value = %d\n",temp->value);
-        printf("isNum? = %d\n",temp->isNum);
-        printf("char data  = %s\n",temp->chr);
+        printf("variable Name  = %s\n",temp->chr);
         printf("}\n");
         temp = temp->next;
     }
@@ -137,11 +149,12 @@ void traverseList(token *head){
 // display
 void display(token* n){
     if(n!=NULL){
-        if(n->isNum==1){
-            printf("%d ",n->value);
-        }else{
-            printf("%c ",n->value);
-        }
+        // if(n->isNum==1){
+        //     printf("%d ",n->value);
+        // }else{
+        //     printf("%c ",n->value);
+        // }
+        printf("%c ",n->value);
     }
 }
 /*
@@ -190,7 +203,7 @@ token* remove_back(token* head){
     return head;
 }
 
-token* replaceNewToken(token* head,int value,_bool isNum,char chr[]){
+token* replaceNewToken(token* head,int value, char chr[]){
     if(head ==  NULL){
         return NULL;
     }
@@ -233,4 +246,41 @@ int search(token* head,char chr[])
         cursor = cursor->next;
     }
     return 0;
+}
+
+token* addAddressToLinkedList(token* head,char chr[]){
+    if(head == NULL){
+        printf("prepend here\n");
+        head = prependAddress(head,chr);
+    }else 
+    {
+        printf("append here\n");
+        head = appendAddress(head,chr);
+    }
+    
+    return head;
+}
+
+int findVar(token* head,char data[]){
+    token *cursor = head;
+    int val;
+    while(cursor!=NULL){
+        if(strcmp(cursor->chr,data)==0){
+            val = cursor->value;
+        }
+        cursor = cursor->next;
+    }
+    
+    return val;
+}
+
+void updateVar(token* head,char data[],int num){
+    token *cursor = head;
+    while(cursor!=NULL){
+        if(strcmp(cursor->chr,data)==0){
+            cursor->value = num;
+            printf("num is: %d and cursor var is:%d",num,cursor->value);
+        }
+        cursor = cursor->next;
+    }
 }

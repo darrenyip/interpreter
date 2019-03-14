@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 {   
     globalStack = NULL;
     head = NULL;
+    linkedListHead = NULL;
     /* scanner module first */
     if(argc > 2 ){
         printf("Usage: AMI [script]");

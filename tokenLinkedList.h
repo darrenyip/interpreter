@@ -6,7 +6,6 @@
 
 typedef struct token {
     char chr[255];
-    _bool isNum;
     int value;
     struct token * next;
 } token;
@@ -17,18 +16,28 @@ typedef void (*callback)(token* data);
 
 
 typedef void (*callback)(token* data);
-token* create(int value,_bool isNum, token* next,char chr[]);
-token* prepend(token* head,int value, _bool isNum,char chr[]);
-void prependAddress(token* head,char chr[]);
-token* append(token* head,int value,_bool isNum,char chr[]);
-void appendAddress(token* head,char chr[]);
+token* create(int value, token* next,char chr[]);
+
+
+token* prepend(token* head,char chr[]);
+token* append(token* head,char chr[]);
+
+
+token* prependAddress(token* head,char chr[]);
+token* appendAddress(token* head,char chr[]);
+token* addAddressToLinkedList(token* head,char chr[]);
+
 void traverse(token* head,callback f);
 void display(token* n);
 void dispose(token* head);
-void addAddressToLinkedList(token* head,char chr[]);
 int count(token *head);
 token* remove_back(token* head);
 void traverseList(token *head);
-token* replaceNewToken(token* head,int value,_bool isNum,char chr[]);
+token* replaceNewToken(token* head,int value,char chr[]);
 token* reverse(token* head);
+
 int search(token* head,char data[]);
+
+int findVar(token* head,char data[]);
+
+void updateVar(token* head,char data[], int num);

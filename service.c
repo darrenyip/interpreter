@@ -13,24 +13,47 @@ void pushService(char data[]){
 }
 
 void rvalue(char data[]){
-    pushRvalue(&globalStack,data);
+    int num;
+    if(head == NULL){
+        head = prepend(head,data);
+        num = findVar(head,data);
+        pushRvalue(&globalStack,data,num);
+    }else{
+        head = append(head,data);
+        num = findVar(head,data);
+        pushRvalue(&globalStack,data,num);
+    }
+    traverseList(head);
 }
 
 void lvalue(char data[]){
     /* create a new token added to linked list then push */
-    addAddressToLinkedList(head,data);
-}
+    if(head == NULL){
+        head = prependAddress(head,data);
+    }else{
+        head = appendAddress(head,data);
+    }
+    traverseList(head);
+}  
 
 void popService(){
     popStack(&globalStack);
 };
 
 void noooice(){
-    int num = popNum(&globalStack);
+    int val = popStack(&globalStack);
+    printf("val: %d   -- noooice()\n",val);
+    char* varName = (char*)popVarName(&globalStack);
+    printf("varName: %s   -- noooice()\n",varName);
+    updateVar(head,varName,val);
+    
+    
+    
     
 }
 
-void copy(){}
+void copy(){
+}
 
 void halt(){
     printf("halt!\n");
