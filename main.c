@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "global.h"
 #include "scanner.h"
-#include "printer.h"
 #include "tokenLinkedList.h"
 
 

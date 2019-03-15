@@ -2,7 +2,9 @@
 #include "global.h"
 #include "stack.h"
 #include "tokenLinkedList.h"
-
+#include "util.h"
+#include "lexer.h"
+#include "scanner.h"
 
 
 void pushService(char data[]){
@@ -14,24 +16,25 @@ void pushService(char data[]){
 
 void rvalue(char data[]){
     int num;
-    if(head == NULL){
-        head = prepend(head,data);
+    if(search(head,data) == FALSE){
         num = findVar(head,data);
-        pushRvalue(&globalStack,data,num);
-    }else{
-        head = append(head,data);
-        num = findVar(head,data);
+        printf("rvalue is :%d -- rvalue()\n",num);
         pushRvalue(&globalStack,data,num);
     }
-    traverseList(head);
+
 }
 
 void lvalue(char data[]){
     /* create a new token added to linked list then push */
-    if(head == NULL){
+    if(search(head,data)){
+        if(head == NULL){
         head = prependAddress(head,data);
     }else{
         head = appendAddress(head,data);
+    }
+    }
+    if(search(head,data) == FALSE){
+        pushLvalue(&globalStack,data);
     }
     traverseList(head);
 }  
@@ -46,10 +49,7 @@ void noooice(){
     char* varName = (char*)popVarName(&globalStack);
     printf("varName: %s   -- noooice()\n",varName);
     updateVar(head,varName,val);
-    
-    
-    
-    
+    traverseList(head);
 }
 
 void copy(){
@@ -63,8 +63,8 @@ void halt(){
 void add(){}
 
 void minus(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result = second - first;
     printf("result of %d - %d = %d\n",second,first,result);
     char data[20];
@@ -72,11 +72,19 @@ void minus(){
     pushNum(&globalStack,data);
 }
 //*
-void multi(){}
+void multi(){
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
+    int result = second * first;
+    printf("result of %d * %d = %d\n",second,first,result);
+    char data[20];
+    sprintf(data,"%d",result);
+    pushNum(&globalStack,data);
+}
 // /
 void divi(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result = second / first;
     printf("result of %d / %d = %d\n",second,first,result);
     char data[20];
@@ -85,8 +93,8 @@ void divi(){
 }
 
 void remainderCal(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result = second % first;
     printf("result of %d div %d = %d\n",second,first,result);
     char data[20];
@@ -95,8 +103,8 @@ void remainderCal(){
 }
 //&
 void andGate(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result = first & second;
     printf("result of %d & %d = %d\n",second,first,result);
     char data[20];
@@ -105,7 +113,7 @@ void andGate(){
 }
 //!
 void negates(){
-    int first = popNum(&globalStack);
+    int first = popStack(&globalStack);
     int result = !first;
     printf("result of negates:%d\n",result);
     char data[20];
@@ -114,8 +122,8 @@ void negates(){
 }
 // |
 void orGate(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result = first | second;
     printf("result of %d | %d = %d\n",second,first,result);
     char data[20];
@@ -125,8 +133,8 @@ void orGate(){
     
 //<>
 void equalCheck(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result;
     if(first == second){
         result = 0;
@@ -141,8 +149,8 @@ void equalCheck(){
 }
 //<=
 void lessEqual(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result;
     if(second <= first){
         result = 1;
@@ -157,8 +165,8 @@ void lessEqual(){
 }
 //>=
 void greaterEqual(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result;
     if(second >= first){
         result = 1;
@@ -173,8 +181,8 @@ void greaterEqual(){
 }
 //<
 void less(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result;
     if(second < first){
         result = 1;
@@ -189,8 +197,8 @@ void less(){
 }
 //>
 void greater(){
-    int first = popNum(&globalStack);
-    int second = popNum(&globalStack);
+    int first = popStack(&globalStack);
+    int second = popStack(&globalStack);
     int result;
     if(second > first){
         result = 1;
@@ -211,10 +219,24 @@ void print(){
 //=
 void equalSign(){}
 
+
+void gotoLoop(char label[]){  //data[] here is the label name 
+    gotoFunc(label);
+}
+void gotoFalse(char label[]){
+    int check = popStack(&globalStack);
+    printf("check:%d\n",check);
+    if(check == 0){
+        gotoFunc(label);
+    }
+}
+
 void parse(char ins[],char data[]){
     if(strcmp(ins,"push") == 0){pushService(data);}
     if(strcmp(ins,"rvalue") == 0){rvalue(data);}
-    if(strcmp(ins,"lvalue") == 0){lvalue(data);}
+    if(strcmp(ins,"lvalue") == 0){
+        lvalue(data);
+    }
     if(strcmp(ins,"print") == 0){print();}
     if(strcmp(ins,"pop") == 0){popService();}
     if(strcmp(ins,":=") == 0){noooice();}
@@ -234,4 +256,6 @@ void parse(char ins[],char data[]){
     if(strcmp(ins,">") == 0){greater();}
     if(strcmp(ins,"<") == 0){less();}
     if(strcmp(ins,"=") == 0){equalSign();}
+    if(strcmp(ins,"goto") == 0){gotoLoop(data);}
+    if(strcmp(ins,"gofalse") == 0){gotoFalse(data);}
 }

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 void pushService(char data[]);
 
 void rvalue(char data[]);
@@ -48,3 +49,5 @@ void equalSign();
 void print();
 
 void parse(char ins[],char data[]);
+
+void gotoLoop(char data[]);

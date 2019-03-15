@@ -3,3 +3,5 @@
 
 void lexerAnalysis();
 void lexerAppendCh(char* s, char c);
+
+int lexerCheck(char label[]);

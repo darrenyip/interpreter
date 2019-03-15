@@ -138,9 +138,9 @@ void traverseList(token *head){
     }
     temp = head;
     while(temp!=NULL){
-        printf("this is the token{\n");
-        printf("value = %d\n",temp->value);
-        printf("variable Name  = %s\n",temp->chr);
+        printf("Variable token{\n");
+        printf("variable : %s ",temp->chr);
+        printf("= %d\n",temp->value);
         printf("}\n");
         temp = temp->next;
     }
@@ -234,18 +234,19 @@ token* reverse(token* head){
     return head;
 }
 
-int search(token* head,char chr[])
+_bool search(token* head,char chr[])
 {
-   token *cursor = head;
+    _bool check = TRUE;
+    token *cursor = head;
     while(cursor!=NULL)
     {
         if(strcmp(cursor->chr,chr)==0){
-            printf("%s exist. number is updated",chr );
-            return 1;
+            printf("%s exist.",chr );
+            check = FALSE;
         }
         cursor = cursor->next;
     }
-    return 0;
+    return check;
 }
 
 token* addAddressToLinkedList(token* head,char chr[]){
@@ -279,7 +280,6 @@ void updateVar(token* head,char data[],int num){
     while(cursor!=NULL){
         if(strcmp(cursor->chr,data)==0){
             cursor->value = num;
-            printf("num is: %d and cursor var is:%d",num,cursor->value);
         }
         cursor = cursor->next;
     }

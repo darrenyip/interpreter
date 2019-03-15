@@ -36,7 +36,7 @@ void traverseList(token *head);
 token* replaceNewToken(token* head,int value,char chr[]);
 token* reverse(token* head);
 
-int search(token* head,char data[]);
+_bool search(token* head,char data[]);
 
 int findVar(token* head,char data[]);
 
